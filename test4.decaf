@@ -1,0 +1,21 @@
+//kuntz
+extern func print_int (int) void; //print int adjusted to print bools
+extern func print_string (string) void;
+extern func read_int () int;
+
+package foo {
+
+      func main () int 
+      {
+      	var a int;
+      	var y int;
+      	a = 0;
+      	y = 2;
+      	print_int(y);
+      	a = a+1;
+      	print_int(a);
+        print_string("\nwahoo\n");
+      } // of main
+
+} // of foo
+

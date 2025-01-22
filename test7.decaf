@@ -1,0 +1,32 @@
+//bleaugh
+
+extern func print_int (int) void;
+extern func print_string (string) void;
+extern func read_int () int;
+
+package foo {
+        var y int =7;
+        var Z int ;
+        var A[100] int ;
+        var x bool = true;
+
+      func main () int 
+      {
+         var x int;
+         x = 0;
+         print_string("Thhi should only print the number 0\n");
+         while (x < 5)
+          {
+             print_int(x);
+             break;
+             print_string("this should never be on the screen\n");
+             x = x + 1;
+             continue;
+
+           }
+         print_string("hello\n");
+
+      } // of main
+
+} // of foo
+

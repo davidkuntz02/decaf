@@ -1,0 +1,23 @@
+//kuntz
+//extern methods explicitly handled by compiler
+extern func print_int(int) int;
+extern func print_string(string) void;
+extern func read_int() int;
+
+package foo {
+var A[100] int;
+
+func main() void{
+	var y int;
+	var X[100] int;
+	y = 13;
+	X[1] = 12;
+	X[2] = y;
+	A[0] = 999;
+	print_int(X[2]);
+	print_string("\n");
+	print_int(A[0]);
+	print_string("\n");
+}//of main
+	
+} // of package foo

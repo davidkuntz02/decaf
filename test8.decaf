@@ -1,0 +1,29 @@
+//owo
+
+extern func print_int (int) void;
+extern func print_string (string) void;
+extern func read_int () int;
+
+package foo {
+
+    var z int = 5;
+      func me( a int, b int, c int )  int {
+
+        print_int(a);
+        print_string("\n");
+        print_int(b);
+        print_string("\n");
+        print_int(c);
+        print_string("\n");
+      } 
+      func main () int 
+      {
+         //var x int;
+        me(5,4,2);
+        print_string("got back from me\n");
+
+
+      } // of main
+
+} // of foo
+

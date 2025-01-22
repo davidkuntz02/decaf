@@ -1,0 +1,58 @@
+// creates the fibanaci
+extern func print_int (int) void;
+extern func print_string (string) void;
+extern func read_int () int;
+
+package fibinaci {
+        var y int = 1;
+        var Z int ;
+        var A[100] int ;
+        var B[100] int ;
+        var x bool = true;
+
+      func fib ( n int) int
+      {
+         
+          if ( n <= 0) {return (0) ;}
+          if ( n == 1) {return (1) ;}
+          //print_string("recursive call\n");
+          return( fib(n-1) + fib(n-2));
+        
+      } // of fib
+
+      func main () int 
+      {
+         var x int;
+         var z int;
+         var C[100] int;
+         x = 0;
+         z = y;
+         
+         A[99] = 40;
+         B[99] = 41;
+         C[99] = 42;
+         print_int(A[99]);
+         print_int(B[99]);
+         print_int(C[99]);
+         
+         while(z==1){
+         	break;
+         	print_string("this will never show up\n");
+         }
+         
+         while (x < 15) //changed this
+        { 
+	 print_string("can handle arrays too...\n");
+         print_int(x);
+         print_string(" : " );
+         print_int(fib(x));
+         print_string("\n");
+          x= x + 1;
+          continue;
+          print_string("this will never show up\n");
+       } // of while
+
+      } // of main
+
+} // of foo
+

@@ -1,0 +1,28 @@
+extern func print_string(string) void;
+package foo1 {
+         var x int = 0 ;
+         var y int =0 ;
+
+       func main() void {
+
+         while (x < 2)
+           {
+           print_string("inside main loop\n");
+                 while ( y < 2)
+                   {  print_string("inside inner loop only once\n");
+
+                      break;
+                      print_string("inside inner loop -NO GOOD\n");
+                      y = y + 1;
+                   }
+
+               print_string("Outer loop SHould be here only once\n");
+               break;
+               x = x + 1;
+          }
+        print_string("should only have one inner and outer message\n");
+           
+      }
+
+
+}  // of package
