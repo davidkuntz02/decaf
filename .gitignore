@@ -54,4 +54,3 @@ dkms.conf
 #Lex and Yacc
 *.yy.c
 *.tab.c
-*.tab.h
