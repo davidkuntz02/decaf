@@ -8,7 +8,7 @@ Ensure lex and yacc are installed in your Linux environment.
     $ sudo apt install flex
     $ sudo apt install bison
 ### To compile Decaf to GAS:
-    $ make		    
+    $ make
     $ ./lab9 -o filename < filename.decaf -d
 (-d debug flag optional to display abstact syntax tree and symbol table data)
 ### To compile and run resulting GAS file:

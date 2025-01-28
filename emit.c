@@ -225,7 +225,7 @@ void Emit_Extern_Method_Call(ASTnode *p, FILE *fp)
    {
 	sprintf(s,"mov $%s, %%rdi", p->S1->S1->label);
         emit(fp,"",s,"RDI is the label address");
-        emit(fp,"","mov $0, %%rax", "RAX needs to be zero");
+        emit(fp,"","mov $0, %rax", "RAX needs to be zero");
 	emit(fp,"","call printf","print a string");
 	fprintf(fp,"\n");
         return;
@@ -236,9 +236,9 @@ void Emit_Extern_Method_Call(ASTnode *p, FILE *fp)
    {
    	emit_expr(p->S1->S1,fp); //mov value to %rax
 
-	emit(fp,"","mov %%rax, %%rsi","RSI needs the value to print");
-	emit(fp,"","mov $percentD, %%rdi","RDI needs to be the int format");
-	emit(fp,"","mov $0, %%rax","RAX needs to be 0");
+	emit(fp,"","mov %rax, %rsi","RSI needs the value to print");
+	emit(fp,"","mov $percentD, %rdi","RDI needs to be the int format");
+	emit(fp,"","mov $0, %rax","RAX needs to be 0");
 	emit(fp,"","call printf","print a number from expression");
 	fprintf(fp,"\n");
 	return;
@@ -248,11 +248,11 @@ void Emit_Extern_Method_Call(ASTnode *p, FILE *fp)
    if (strcmp(p->name,"read_int") == 0)
    {
 	
-	emit(fp,"","mov $_SCANFHOLD, %%rsi","read in a number");
-	emit(fp,"","mov $percentD , %%rdi","rdi has integer format for scanf");
-	emit(fp,"","mov $0 , %%rax","No other parameters for scanf");
+	emit(fp,"","mov $_SCANFHOLD, %rsi","read in a number");
+	emit(fp,"","mov $percentD , %rdi","rdi has integer format for scanf");
+	emit(fp,"","mov $0 , %rax","No other parameters for scanf");
 	emit(fp,"","call  __isoc99_scanf","call read");
-	emit(fp,"","mov _SCANFHOLD, %%rax","bring value on STACK into RAX register for default value");
+	emit(fp,"","mov _SCANFHOLD, %rax","bring value on STACK into RAX register for default value");
 	
 	fprintf(fp,"\n");
 	return;
@@ -288,7 +288,7 @@ switch (p->type) {
 		break;
 	case A_VAR_RVAL:
 		emit_ident(p,fp); //rax has memory address
-		emit(fp,"","mov (%%rax), %%rax","read in memory value from rhs");
+		emit(fp,"","mov (%rax), %rax","read in memory value from rhs");
 		return;
 		break;
 	default: break; //not initialized; we have to do math now :'(
@@ -304,7 +304,7 @@ switch (p->type) {
      	emit(fp,"",s,"STORE LHS of expression to memory"); 
      	emit_expr(p->S2,fp);     //evaluate rhs
      	//mov rax to rbx
-     	emit(fp,"","mov %%rax, %%rbx","right hand side needs to be set");
+     	emit(fp,"","mov %rax, %rbx","right hand side needs to be set");
      	//restore lhs to rax
      	sprintf(s,"mov %d(%%rsp), %%rax",p->symbol->offset*WSIZE);
      	emit(fp,"",s,"FETCH LHS of expression from memory"); 
@@ -314,89 +314,89 @@ switch (p->type) {
     switch(p->operator) {
     		/*--integer math--*/
    		case A_PLUS : 
-	              emit(fp,"","add %%rbx, %%rax", "EXPR ADD");
+	              emit(fp,"","add %rbx, %rax", "EXPR ADD");
 	              fprintf(fp,"\n");
                       break;
                 case A_MINUS : 
-	              emit(fp,"","sub %%rbx, %%rax", "EXPR SUBTRACT");
+	              emit(fp,"","sub %rbx, %rax", "EXPR SUBTRACT");
 	              fprintf(fp,"\n");
                       break; 
 		case A_TIMES : 
-	              emit(fp,"","imul %%rbx, %%rax", "EXPR MULT RAX has lower word");
+	              emit(fp,"","imul %rbx, %rax", "EXPR MULT RAX has lower word");
 	              fprintf(fp,"\n");
                       break;  
                 case A_DIVIDE: 
-                      emit(fp,"","mov $0,%%rdx","EXPR upper word 0 DIV");
-	              emit(fp,"","idiv %%rbx", "EXPR DIV");
+                      emit(fp,"","mov $0,%rdx","EXPR upper word 0 DIV");
+	              emit(fp,"","idiv %rbx", "EXPR DIV");
 	              fprintf(fp,"\n");
                       break; 
                 case A_MOD: 
-                      emit(fp,"","mov $0,%%rdx","EXPR upper word 0 DIV");
-	              emit(fp,"","idiv %%rbx", "EXPR MOD");
-	              emit(fp,"","mov %%rdx, %%rax", "MOD needs to be in RAX");
+                      emit(fp,"","mov $0,%rdx","EXPR upper word 0 DIV");
+	              emit(fp,"","idiv %rbx", "EXPR MOD");
+	              emit(fp,"","mov %rdx, %rax", "MOD needs to be in RAX");
 	              fprintf(fp,"\n");
                       break;
                 case A_UMINUS: //multiply by -1 haha
                 	//rax is S1 value
-                	emit(fp,"","mov $-1, %%rbx", "set rbx to -1");//set rbx to -1
-                	emit(fp,"","imul %%rbx, %%rax", "EXPR UMINUS");//multiply by -1
+                	emit(fp,"","mov $-1, %rbx", "set rbx to -1");//set rbx to -1
+                	emit(fp,"","imul %rbx, %rax", "EXPR UMINUS");//multiply by -1
                 	fprintf(fp,"\n");
                       break;
                 /*--boolean math--*/
                 case A_NOT: //set a reg to 1 and xor
                 	//rax is S1 value
-                	emit(fp,"","mov $1, %%rbx", "set rbx to 1");//set rbx to 1
-                	emit(fp,"","xor %%rbx, %%rax", "EXPR NOT");//flip it
+                	emit(fp,"","mov $1, %rbx", "set rbx to 1");//set rbx to 1
+                	emit(fp,"","xor %rbx, %rax", "EXPR NOT");//flip it
                 	fprintf(fp,"\n");
                       break;
                 case A_AND : 
-	              emit(fp,"","and %%rbx, %%rax", "EXPR AND");
+	              emit(fp,"","and %rbx, %rax", "EXPR AND");
 	              fprintf(fp,"\n");
                       break;
                 case A_OR : 
-	              emit(fp,"","or %%rbx, %%rax", "EXPR OR");
+	              emit(fp,"","or %rbx, %rax", "EXPR OR");
 	              fprintf(fp,"\n");
                       break; 
                 case A_LT : 
-	              emit(fp,"","cmp %%rbx, %%rax", "EXPR LESSTHAN");
+	              emit(fp,"","cmp %rbx, %rax", "EXPR LESSTHAN");
 	              emit(fp,"","setl %al", "EXPR LESSTHAN");
-	              emit(fp,"","mov $1,%%rbx", "set rbx to one to filter rax");
-	              emit(fp,"","and %%rbx, %%rax", "filter RAX");
+	              emit(fp,"","mov $1,%rbx", "set rbx to one to filter rax");
+	              emit(fp,"","and %rbx, %rax", "filter RAX");
 	              fprintf(fp,"\n");
                       break;   
                 case A_GT : 
-	              emit(fp,"","cmp %%rbx, %%rax", "EXPR GREATERTHAN");
+	              emit(fp,"","cmp %rbx, %rax", "EXPR GREATERTHAN");
 	              emit(fp,"","setg %al", "EXPR GREATERTHAN");
-	              emit(fp,"","mov $1,%%rbx", "set rbx to one to filter rax");
-	              emit(fp,"","and %%rbx, %%rax", "filter RAX");
+	              emit(fp,"","mov $1,%rbx", "set rbx to one to filter rax");
+	              emit(fp,"","and %rbx, %rax", "filter RAX");
 	              fprintf(fp,"\n");
                       break; 
                 case A_LEQ : 
-	              emit(fp,"","cmp %%rbx, %%rax", "EXPR LESSEQUAL");
+	              emit(fp,"","cmp %rbx, %rax", "EXPR LESSEQUAL");
 	              emit(fp,"","setle %al", "EXPR LESSEQUAL");
-	              emit(fp,"","mov $1,%%rbx", "set rbx to one to filter rax");
-	              emit(fp,"","and %%rbx, %%rax", "filter RAX");
+	              emit(fp,"","mov $1,%rbx", "set rbx to one to filter rax");
+	              emit(fp,"","and %rbx, %rax", "filter RAX");
 	              fprintf(fp,"\n");
                       break;   
                 case A_GEQ : 
-	              emit(fp,"","cmp %%rbx, %%rax", "EXPR GREATEREQUAL");
+	              emit(fp,"","cmp %rbx, %rax", "EXPR GREATEREQUAL");
 	              emit(fp,"","setge %al", "EXPR GREATEREQUAL");
-	              emit(fp,"","mov $1,%%rbx", "set rbx to one to filter rax");
-	              emit(fp,"","and %%rbx, %%rax", "filter RAX");
+	              emit(fp,"","mov $1,%rbx", "set rbx to one to filter rax");
+	              emit(fp,"","and %rbx, %rax", "filter RAX");
 	              fprintf(fp,"\n");
                       break;
                 case A_NEQ : 
-	              emit(fp,"","cmp %%rbx, %%rax", "EXPR NOTEQUAL");
+	              emit(fp,"","cmp %rbx, %rax", "EXPR NOTEQUAL");
 	              emit(fp,"","setne %al", "EXPR NOTEQUAL");
-	              emit(fp,"","mov $1,%%rbx", "set rbx to one to filter rax");
-	              emit(fp,"","and %%rbx, %%rax", "filter RAX");
+	              emit(fp,"","mov $1,%rbx", "set rbx to one to filter rax");
+	              emit(fp,"","and %rbx, %rax", "filter RAX");
 	              fprintf(fp,"\n");
                       break;   
                 case A_EQ : 
-	              emit(fp,"","cmp %%rbx, %%rax", "EXPR EQUAL");
+	              emit(fp,"","cmp %rbx, %rax", "EXPR EQUAL");
 	              emit(fp,"","sete %al", "EXPR EQUAL");
-	              emit(fp,"","mov $1,%%rbx", "set rbx to one to filter rax");
-	              emit(fp,"","and %%rbx, %%rax", "filter RAX");
+	              emit(fp,"","mov $1,%rbx", "set rbx to one to filter rax");
+	              emit(fp,"","and %rbx, %rax", "filter RAX");
 	              fprintf(fp,"\n");
                       break;
 		default: printf("im scared and confused and shaking and crying\n");

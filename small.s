@@ -20,7 +20,7 @@ _L1:	.string  "\n"	# global string
 	.type main @function 
 main:	#Start of Function 
 	.cfi_startproc	# 	STANDARD FUNCTION HEADER FOR GAS
-	pushq   %%rbp	# 	STANDARD FUNCTION HEADER FOR GAS
+	pushq   %rbp	# 	STANDARD FUNCTION HEADER FOR GAS
 	.cfi_def_cfa_offset 16	# 	STANDARD FUNCTION HEADER FOR GAS
 	.cfi_offset 6, -16	# 	STANDARD FUNCTION HEADER FOR GAS
 	movq    %rsp, %rbp	# 	STANDARD FUNCTION HEADER FOR GAS
